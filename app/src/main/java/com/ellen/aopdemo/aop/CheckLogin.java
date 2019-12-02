@@ -7,7 +7,5 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface SingleClick {
-    long interval() default 3000;
-    int[] exceptViews() default {-1};
+public @interface CheckLogin {
 }

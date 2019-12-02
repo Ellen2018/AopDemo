@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.ellen.aopdemo.aop.TestAnnoTrace;
+import com.ellen.aopdemo.aop.CheckLogin;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,8 +25,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    @TestAnnoTrace(value = "dsad", type = 3 )
+    @CheckLogin
     public void test(View view) {
         System.out.println("Hello, I am CSDN_LQR");
+        test();
     }
+
+    public void test(){}
 }

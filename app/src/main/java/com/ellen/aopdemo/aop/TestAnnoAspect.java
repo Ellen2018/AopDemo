@@ -2,6 +2,8 @@ package com.ellen.aopdemo.aop;
 
 import android.util.Log;
 
+import com.ellen.aopdemo.LoginManager;
+
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
@@ -11,11 +13,14 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
+
+import java.lang.reflect.Method;
 
 @Aspect
 public class TestAnnoAspect {
 
-    @Pointcut("execution(@com.ellen.aopdemo.aop.TestAnnoTrace * *(..))")
+    @Pointcut("execution(@com.ellen.aopdemo.aop.CheckLogin * *(..))")
     public void pointcut() {
 
     }
@@ -30,7 +35,18 @@ public class TestAnnoAspect {
         Log.e("Ellen2018","around");
 
         //一定要加上这句话，不然切面的方法不会被调用
-        joinPoint.proceed();
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        Method method = signature.getMethod();
+        // 通过Method对象得到切点上的注解
+        CheckLogin annotation = method.getAnnotation(CheckLogin.class);
+        if(!LoginManager.isLogin){
+            //没有登陆进行登陆
+            LoginManager.toLoginActivity();
+        }else {
+            //已经登陆说明可以执行此方法
+            LoginManager.logined();
+            joinPoint.proceed();
+        }
     }
 
     @After("pointcut()")
