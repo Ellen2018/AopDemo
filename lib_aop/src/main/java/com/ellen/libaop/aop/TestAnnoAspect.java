@@ -1,11 +1,6 @@
-package com.ellen.aopdemo.aop;
+package com.ellen.libaop.aop;
 
-import android.os.Build;
 import android.util.Log;
-
-import androidx.annotation.RequiresApi;
-
-import com.ellen.aopdemo.LoginManager;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -23,7 +18,7 @@ import java.lang.reflect.Method;
 @Aspect
 public class TestAnnoAspect {
 
-    @Pointcut("execution(@com.ellen.aopdemo.aop.CheckLogin * *(..))")
+    @Pointcut("execution(@com.ellen.libaop.aop.CheckLoginModule * *(..))")
     public void pointcut() {
 
     }
@@ -33,23 +28,14 @@ public class TestAnnoAspect {
         Log.e("Ellen2018","before");
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Around("pointcut()")
     public void around(ProceedingJoinPoint joinPoint) throws Throwable {
         Log.e("Ellen2018","around");
 
-
+        //一定要加上这句话，不然切面的方法不会被调用
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
         // 通过Method对象得到切点上的注解
-        CheckLogin checkLogin = method.getDeclaredAnnotation(CheckLogin.class);
-        if(!LoginManager.isLogin){
-            LoginManager.toLoginActivity();
-        }else {
-            LoginManager.logined();
-            //一定要加上这句话，不然切面的方法不会被调用
-            joinPoint.proceed();
-        }
     }
 
     @After("pointcut()")
